@@ -19,10 +19,17 @@ export default class ProductList {
   }
 
   async init() {
-    // Fetch product list array from dataSource
+    // Fetch full product list array from dataSource
     const list = await this.dataSource.getData();
-    // Render product cards using template helper
-    this.renderList(list);
+    // Filter down to the four target products
+    const filteredList = this.filterProducts(list);
+    // Render filtered product cards using template helper
+    this.renderList(filteredList);
+  }
+
+  filterProducts(list) {
+    const requiredIds = ["880RR", "985RF", "989CG", "880RT"];
+    return list.filter((product) => requiredIds.includes(product.Id));
   }
 
   renderList(list) {
