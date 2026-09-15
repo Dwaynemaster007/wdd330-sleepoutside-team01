@@ -1,4 +1,10 @@
 import { getLocalStorage, setLocalStorage } from "./utils.mjs";
+import { renderCartCount } from "./utils.mjs";
+
+export function addToCart(product) {
+  // Add item logic...
+  renderCartCount();
+}
 
 export default class ProductDetails {
   constructor(productId, dataSource) {
@@ -46,4 +52,21 @@ export default class ProductDetails {
       this.product.DescriptionHtmlSimple;
     document.getElementById("addToCart").dataset.id = this.product.Id;
   }
+}
+
+function renderProductDetails(product, parentElement) {
+  parentElement.querySelector("#productName").textContent = product.Name;
+  parentElement.querySelector("#productNameWithoutBrand").textContent =
+    product.NameWithoutBrand;
+  parentElement.querySelector("#productImage").src =
+    product.Images.PrimaryLarge;
+  parentElement.querySelector("#productImage").alt = product.Name;
+  parentElement.querySelector(
+    "#productFinalPrice"
+  ).textContent = `$${product.FinalPrice}`;
+  parentElement.querySelector("#productColorName").textContent =
+    product.Colors[0].ColorName;
+  parentElement.querySelector("#productDescriptionHtmlSimple").innerHTML =
+    product.DescriptionHtmlSimple;
+  parentElement.querySelector("#addToCart").dataset.id = product.Id;
 }
