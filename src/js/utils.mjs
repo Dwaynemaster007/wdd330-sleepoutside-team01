@@ -2,17 +2,22 @@
 export function qs(selector, parent = document) {
   return parent.querySelector(selector);
 }
-// or a more concise version if you are into that sort of thing:
-// export const qs = (selector, parent = document) => parent.querySelector(selector);
 
-// retrieve data from localstorage
+// retrieve data from localstorage safely
 export function getLocalStorage(key) {
-  return JSON.parse(localStorage.getItem(key));
+  const data = localStorage.getItem(key);
+  try {
+    return data ? JSON.parse(data) : [];
+  } catch (e) {
+    return [];
+  }
 }
+
 // save data to local storage
 export function setLocalStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
 }
+
 // set a listener for both touchend and click
 export function setClick(selector, callback) {
   qs(selector).addEventListener("touchend", (event) => {
@@ -44,9 +49,11 @@ export function renderListWithTemplate(
 
 // Render template HTML into a parent element
 export function renderWithTemplate(template, parentElement, data, callback) {
-  parentElement.innerHTML = template;
-  if (callback) {
-    callback(data);
+  if (parentElement) {
+    parentElement.innerHTML = template;
+    if (callback) {
+      callback(data);
+    }
   }
 }
 
@@ -57,14 +64,41 @@ export async function loadTemplate(path) {
   return template;
 }
 
+// Count total items in cart localStorage
+export function getCartCount() {
+  const cartItems = getLocalStorage("so-cart");
+  if (!Array.isArray(cartItems)) return 0;
+  return cartItems.reduce((total, item) => total + (item.Quantity || 1), 0);
+}
+
+// Render cart badge number
+export function renderCartCount() {
+  const countElement = document.querySelector("#cart-count");
+  if (countElement) {
+    const count = getCartCount();
+    countElement.textContent = count;
+    if (count > 0) {
+      countElement.classList.remove("hide");
+    } else {
+      countElement.classList.add("hide");
+    }
+  }
+}
+
 // Fetch and render header & footer into current page
 export async function loadHeaderFooter() {
-  const headerTemplate = await loadTemplate("../partials/header.html");
-  const footerTemplate = await loadTemplate("../partials/footer.html");
+  try {
+    const headerTemplate = await loadTemplate("../partials/header.html");
+    const footerTemplate = await loadTemplate("../partials/footer.html");
 
-  const headerElement = document.querySelector("#main-header");
-  const footerElement = document.querySelector("#main-footer");
+    const headerElement = document.querySelector("#main-header");
+    const footerElement = document.querySelector("#main-footer");
 
-  renderWithTemplate(headerTemplate, headerElement);
-  renderWithTemplate(footerTemplate, footerElement);
+    renderWithTemplate(headerTemplate, headerElement);
+    renderWithTemplate(footerTemplate, footerElement);
+
+    renderCartCount();
+  } catch (error) {
+    console.error("Failed to load header/footer templates:", error);
+  }
 }
