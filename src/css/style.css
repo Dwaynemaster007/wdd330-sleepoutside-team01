@@ -523,3 +523,74 @@ footer {
   text-align: right;
   margin: 0;
 }
+
+/* Cart Badge Positioning */
+.cart {
+  position: relative;
+}
+
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  background-color: var(--secondary-color, #333);
+  color: white;
+  border-radius: 50%;
+  padding: 0.2em 0.5em;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+/* ==========================================================================
+   Product Detail Layout Fixes
+   ========================================================================== */
+
+.product-detail {
+  padding: 1rem;
+  max-width: 1100px; /* Expanded from 500px to allow side-by-side layout */
+  margin: 0 auto;
+  width: 100%;
+}
+
+.product-detail__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  align-items: center;
+}
+
+.product-detail__image-wrapper {
+  width: 100%;
+  max-width: 420px;
+  flex: 0 0 auto;
+}
+
+.product-detail img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.product-detail__info {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.product__description {
+  width: 100%;
+  line-height: 1.6;
+  margin-top: 1rem;
+}
+
+/* Desktop layout rules */
+@media screen and (min-width: 768px) {
+  .product-detail__content {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}

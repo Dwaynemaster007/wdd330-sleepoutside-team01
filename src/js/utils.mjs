@@ -20,11 +20,13 @@ export function setLocalStorage(key, data) {
 
 // set a listener for both touchend and click
 export function setClick(selector, callback) {
-  qs(selector).addEventListener("touchend", (event) => {
+  const elem = qs(selector);
+  if (!elem) return;
+  elem.addEventListener("touchend", (event) => {
     event.preventDefault();
     callback();
   });
-  qs(selector).addEventListener("click", callback);
+  elem.addEventListener("click", callback);
 }
 
 export function getParam(param) {
@@ -48,7 +50,7 @@ export function renderListWithTemplate(
 }
 
 // Render template HTML into a parent element
-export function renderWithTemplate(template, parentElement, data, callback) {
+export function renderWithTemplate(template, parentElement, callback, data) {
   if (parentElement) {
     parentElement.innerHTML = template;
     if (callback) {
@@ -76,11 +78,14 @@ export function renderCartCount() {
   const countElement = document.querySelector("#cart-count");
   if (countElement) {
     const count = getCartCount();
-    countElement.textContent = count;
     if (count > 0) {
+      countElement.textContent = count;
       countElement.classList.remove("hide");
+      countElement.style.display = "flex";
     } else {
+      countElement.textContent = "";
       countElement.classList.add("hide");
+      countElement.style.display = "none";
     }
   }
 }
