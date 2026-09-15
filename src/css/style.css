@@ -277,3 +277,53 @@ footer {
   font-size: var(--small-font);
   padding: 1em;
 }
+
+/* Product Category Layout Fixes */
+.categories {
+  padding: 1.5rem 1rem;
+  text-align: center;
+}
+
+.category-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.category-grid a {
+  text-decoration: none;
+  color: var(--dark-grey);
+  flex: 1 1 200px;
+  max-width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border: 1px solid var(--light-grey);
+  border-radius: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.category-grid a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Constrain all card and category images to fit their containers */
+.product-card img,
+.category-grid img {
+  max-width: 100%;
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+}
+
+.category-grid h3 {
+  font-size: 1rem;
+  margin: 0;
+}
