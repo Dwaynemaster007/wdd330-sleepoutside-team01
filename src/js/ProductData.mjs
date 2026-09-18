@@ -1,10 +1,13 @@
-const baseURL = import.meta.env.VITE_SERVER_URL;
+// Fallback to default API URL if VITE_SERVER_URL is not set in build environment
+const rawBaseURL = import.meta.env.VITE_SERVER_URL || "https://wdd330-backend.onrender.com/";
+// Ensure baseURL always ends with a slash
+const baseURL = rawBaseURL.endsWith("/") ? rawBaseURL : `${rawBaseURL}/`;
 
 function convertToJson(res) {
   if (res.ok) {
     return res.json();
   } else {
-    throw new Error("Bad Response");
+    throw new Error(`Bad Response: ${res.status}`);
   }
 }
 

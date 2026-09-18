@@ -4,9 +4,9 @@ import { loadHeaderFooter, getParam } from "./utils.mjs";
 
 loadHeaderFooter();
 
-const category = getParam("category");
+const category = getParam("category") || "tents";
 
-// Update page title and header heading dynamically
+// Update page title dynamically
 if (category) {
   const formattedCategory = category.charAt(0).toUpperCase() + category.slice(1);
   const titleElement = document.querySelector(".title");
@@ -15,7 +15,7 @@ if (category) {
   }
 }
 
-const dataSource = new ProductData();
+const dataSource = new ProductData(category);
 const listElement = document.querySelector(".product-list");
 const myList = new ProductList(category, dataSource, listElement);
 

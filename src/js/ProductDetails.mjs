@@ -20,11 +20,18 @@ export default class ProductDetails {
   }
 
   addProductToCart() {
-    let cartItems = getLocalStorage("so-cart");
-    if (!Array.isArray(cartItems)) {
-      cartItems = [];
+    const cartItems = getLocalStorage("so-cart");
+
+    // If this product is already in the cart, bump its quantity
+    // instead of adding a second copy of the same item.
+    const existingItem = cartItems.find((item) => item.Id === this.product.Id);
+
+    if (existingItem) {
+      existingItem.Quantity = (existingItem.Quantity || 1) + 1;
+    } else {
+      cartItems.push({ ...this.product, Quantity: 1 });
     }
-    cartItems.push(this.product);
+
     setLocalStorage("so-cart", cartItems);
     renderCartCount();
   }

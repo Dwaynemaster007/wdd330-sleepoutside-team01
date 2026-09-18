@@ -3,12 +3,16 @@ export function qs(selector, parent = document) {
   return parent.querySelector(selector);
 }
 
-// retrieve data from localstorage safely
+// Retrieve data from localStorage safely.
+// Always returns an array so callers can map/reduce without null checks.
+// localStorage.getItem returns null for a missing key, and JSON.parse(null)
+// returns null -- calling .map() on that is what crashed the empty cart page.
 export function getLocalStorage(key) {
-  const data = localStorage.getItem(key);
   try {
-    return data ? JSON.parse(data) : [];
-  } catch (e) {
+    const data = JSON.parse(localStorage.getItem(key));
+    return Array.isArray(data) ? data : [];
+  } catch {
+    // Malformed JSON left over from an older version of the app
     return [];
   }
 }
@@ -66,10 +70,9 @@ export async function loadTemplate(path) {
   return template;
 }
 
-// Count total items in cart localStorage
+// Count total items in cart localStorage (respects per-item Quantity)
 export function getCartCount() {
   const cartItems = getLocalStorage("so-cart");
-  if (!Array.isArray(cartItems)) return 0;
   return cartItems.reduce((total, item) => total + (item.Quantity || 1), 0);
 }
 

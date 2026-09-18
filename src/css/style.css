@@ -594,3 +594,13 @@ footer {
     align-items: flex-start;
   }
 }
+
+.hide {
+  display: none;
+}
+
+.cart-card__empty {
+  list-style: none;
+  padding: 1em 0;
+  text-align: center;
+}
