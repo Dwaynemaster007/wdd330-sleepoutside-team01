@@ -53,6 +53,7 @@ export default class ProductDetails {
 
     document.querySelector("#productFinalPrice").textContent =
       `$${this.product.FinalPrice}`;
+    this.renderProductDiscount();
     document.querySelector("#productColorName").textContent =
       this.product.Colors?.[0]?.ColorName || "";
     document.querySelector("#productDescriptionHtmlSimple").innerHTML =
@@ -63,4 +64,26 @@ export default class ProductDetails {
       addBtn.dataset.id = this.product.Id;
     }
   }
+
+  // Ticket: "Add discount to product detail pages"
+  // Compares MSRP (SuggestedRetailPrice) to what the customer actually pays
+  // (FinalPrice) and shows a badge only when there is a real discount.
+  renderProductDiscount() {
+    const discountElement = document.querySelector("#productDiscount");
+    if (!discountElement) return;
+
+    const msrp = Number(this.product.SuggestedRetailPrice);
+    const finalPrice = Number(this.product.FinalPrice);
+
+    if (!msrp || !finalPrice || msrp <= finalPrice) {
+      discountElement.textContent = "";
+      discountElement.classList.add("hide");
+      return;
+    }
+
+    const percentOff = Math.round(((msrp - finalPrice) / msrp) * 100);
+    const amountOff = (msrp - finalPrice).toFixed(2);
+
+    discountElement.textContent = `Save ${percentOff}% ($${amountOff} off)`;
+    discountElement.classList.remove("hide");
 }

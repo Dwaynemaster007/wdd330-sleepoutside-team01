@@ -1,5 +1,6 @@
 import ProductData from "./ProductData.mjs";
 import ProductList from "./ProductList.mjs";
+import Alert from "./Alert.js";
 import { loadHeaderFooter } from "./utils.mjs";
 
 loadHeaderFooter();
@@ -13,3 +14,7 @@ const listElement = document.querySelector(".product-list");
 // Create instance of ProductList and initialize it
 const productList = new ProductList("tents", dataSource, listElement);
 productList.init();
+
+// Ticket: "Add customizable alert to index.html"
+const alert = new Alert();
+alert.init();
