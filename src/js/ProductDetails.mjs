@@ -86,4 +86,5 @@ export default class ProductDetails {
 
     discountElement.textContent = `Save ${percentOff}% ($${amountOff} off)`;
     discountElement.classList.remove("hide");
+  }
 }
