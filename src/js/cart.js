@@ -12,29 +12,32 @@ function renderCartContents() {
   } else {
     listElement.innerHTML = cartItems.map(cartItemTemplate).join("");
     attachRemoveListeners();
+    attachQuantityListeners();
   }
 
   renderCartTotal(cartItems);
   renderCartCount();
 }
 
+// Ticket: "Total$ in Cart" -- only show the total when the cart isn't empty
 function renderCartTotal(cartItems) {
-  const totalElement = document.querySelector("#cartTotal");
   const footerElement = document.querySelector(".cart-footer");
+  const totalElement = document.querySelector(".cart-total");
 
-  if (!totalElement) return;
+  if (!footerElement || !totalElement) return;
+
+  if (cartItems.length === 0) {
+    footerElement.classList.add("hide");
+    return;
+  }
 
   const total = cartItems.reduce(
     (sum, item) => sum + Number(item.FinalPrice) * (item.Quantity || 1),
     0
   );
 
-  totalElement.textContent = `$${total.toFixed(2)}`;
-
-  // Hide the total row entirely when there is nothing in the cart
-  if (footerElement) {
-    footerElement.classList.toggle("hide", cartItems.length === 0);
-  }
+  totalElement.innerHTML = `Total: $${total.toFixed(2)}`;
+  footerElement.classList.remove("hide");
 }
 
 function cartItemTemplate(item) {
@@ -60,7 +63,11 @@ function cartItemTemplate(item) {
     <h2 class="card__name">${item.Name}</h2>
   </a>
   <p class="cart-card__color">${item.Colors?.[0]?.ColorName || ""}</p>
-  <p class="cart-card__quantity">qty: ${quantity}</p>
+  <div class="cart-card__qty-controls">
+    <button type="button" class="cart-card__qty-btn" data-id="${item.Id}" data-action="decrease" aria-label="Decrease quantity of ${item.Name}">&minus;</button>
+    <span class="cart-card__qty-value">${quantity}</span>
+    <button type="button" class="cart-card__qty-btn" data-id="${item.Id}" data-action="increase" aria-label="Increase quantity of ${item.Name}">&plus;</button>
+  </div>
   <p class="cart-card__price">$${(Number(item.FinalPrice) * quantity).toFixed(2)}</p>
 </li>`;
 }
@@ -73,21 +80,46 @@ function attachRemoveListeners() {
   });
 }
 
-// Removes one unit. If that was the last one, drop the line item entirely.
+// Ticket: "Cart quantities" -- +/- buttons on each line item
+function attachQuantityListeners() {
+  document.querySelectorAll(".cart-card__qty-btn").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      const { id, action } = event.currentTarget.dataset;
+      updateQuantity(id, action);
+    });
+  });
+}
+
+function updateQuantity(productId, action) {
+  const cartItems = getLocalStorage("so-cart");
+  const item = cartItems.find((item) => item.Id === productId);
+
+  if (!item) return;
+
+  const currentQty = item.Quantity || 1;
+
+  if (action === "increase") {
+    item.Quantity = currentQty + 1;
+  } else if (action === "decrease") {
+    if (currentQty <= 1) {
+      // Quantity can't go below 1 from the stepper -- use the remove (x) to delete the line
+      return;
+    }
+    item.Quantity = currentQty - 1;
+  }
+
+  setLocalStorage("so-cart", cartItems);
+  renderCartContents();
+}
+
+// Removes a line item entirely (the "x" button)
 function removeFromCart(productId) {
   const cartItems = getLocalStorage("so-cart");
   const index = cartItems.findIndex((item) => item.Id === productId);
 
   if (index === -1) return;
 
-  const item = cartItems[index];
-
-  if ((item.Quantity || 1) > 1) {
-    item.Quantity -= 1;
-  } else {
-    cartItems.splice(index, 1);
-  }
-
+  cartItems.splice(index, 1);
   setLocalStorage("so-cart", cartItems);
   renderCartContents();
 }

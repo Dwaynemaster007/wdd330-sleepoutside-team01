@@ -59,8 +59,11 @@
         <ul class="product-list">
           <!-- Dynamic cart items loaded via cart.js -->
         </ul>
-                <div class="cart-footer hide">
-          <p class="cart-total">Total: <span id="cartTotal">$0.00</span></p>
+
+        <!-- Filled in by cart.js only when the cart has items.
+             Will also hold the Checkout button in a later ticket. -->
+        <div class="cart-footer hide">
+          <p class="cart-total">Total: </p>
         </div>
       </section>
     </main>

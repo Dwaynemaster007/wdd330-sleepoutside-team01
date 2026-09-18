@@ -406,6 +406,59 @@ footer {
   display: none;
 }
 
+/* Generic utility — anything with this class is hidden regardless of type */
+.hide {
+  display: none;
+}
+
+.cart-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 0;
+  border-top: 1px solid var(--dark-grey, #ccc);
+  margin-top: 1rem;
+}
+
+.cart-total {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.cart-card__empty {
+  list-style: none;
+  padding: 2rem 0;
+  text-align: center;
+  color: var(--dark-grey, #666);
+}
+
+/* Quantity stepper inside each cart line item */
+.cart-card__qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.cart-card__qty-btn {
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 1px solid var(--dark-grey, #ccc);
+  background: #fff;
+  border-radius: 4px;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.cart-card__qty-btn:hover {
+  background: #eee;
+}
+
+.cart-card__qty-value {
+  min-width: 1.2rem;
+  text-align: center;
+}
+
 /* Container for image + details */
 .product-detail__content {
   display: flex;
@@ -593,14 +646,4 @@ footer {
     flex-direction: row;
     align-items: flex-start;
   }
-}
-
-.hide {
-  display: none;
-}
-
-.cart-card__empty {
-  list-style: none;
-  padding: 1em 0;
-  text-align: center;
 }
