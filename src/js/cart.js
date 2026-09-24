@@ -124,4 +124,15 @@ function removeFromCart(productId) {
   renderCartContents();
 }
 
+
+// Example: Calculate total cart value using reduce
+function calculateTotal(cartItems) {
+  return cartItems.reduce((total, item) => total + item.FinalPrice * item.Quantity, 0);
+}
+
+// Example: Filter products using a higher-order function
+function filterByCategory(products, category) {
+  return products.filter(product => product.Category === category);
+}
+
 renderCartContents();
