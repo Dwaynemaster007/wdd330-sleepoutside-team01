@@ -55,15 +55,18 @@
     <main class="divider">
       <section class="products">
         <h2>My Cart</h2>
-
+      <!-- ⬇️ Cart Footer Component added here ⬇️ -->
+      <div class="cart-footer">
+        <p class="cart-total">Total: $0.00</p>
+        <a href="../checkout/index.html" class="btn" id="checkout-btn">Proceed to Checkout</a>
+      </div>
         <ul class="product-list">
           <!-- Dynamic cart items loaded via cart.js -->
         </ul>
 
-        <!-- Filled in by cart.js only when the cart has items.
-             Will also hold the Checkout button in a later ticket. -->
-        <div class="cart-footer hide">
+                <div class="cart-footer hide">
           <p class="cart-total">Total: </p>
+          <a class="checkout-button" href="/checkout/index.html">Checkout</a>
         </div>
       </section>
     </main>

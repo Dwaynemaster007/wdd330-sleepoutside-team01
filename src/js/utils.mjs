@@ -96,8 +96,8 @@ export function renderCartCount() {
 // Fetch and render header & footer into current page
 export async function loadHeaderFooter() {
   try {
-    const headerTemplate = await loadTemplate("../partials/header.html");
-    const footerTemplate = await loadTemplate("../partials/footer.html");
+    const headerTemplate = await loadTemplate("/partials/header.html");
+    const footerTemplate = await loadTemplate("/partials/footer.html");
 
     const headerElement = document.querySelector("#main-header");
     const footerElement = document.querySelector("#main-footer");
