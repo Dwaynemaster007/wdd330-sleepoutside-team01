@@ -106,7 +106,84 @@ export async function loadHeaderFooter() {
     renderWithTemplate(footerTemplate, footerElement);
 
     renderCartCount();
+    setupProductSearch();
   } catch (error) {
     console.error("Failed to load header/footer templates:", error);
   }
+}
+
+// Non-blocking alert banner (used for checkout errors, add-to-cart, etc.)
+export function alertMessage(message, scroll = true) {
+  const alert = document.createElement("div");
+  alert.classList.add("alert");
+
+  const textEl = document.createElement("p");
+  textEl.textContent = message;
+
+  const close = document.createElement("span");
+  close.textContent = "X";
+  close.setAttribute("role", "button");
+  close.setAttribute("tabindex", "0");
+  close.setAttribute("aria-label", "Dismiss message");
+
+  alert.appendChild(textEl);
+  alert.appendChild(close);
+
+  alert.addEventListener("click", (e) => {
+    // Remove when the X is clicked
+    if (e.target === close || e.target.innerText === "X") {
+      alert.remove();
+    }
+  });
+
+  const main = document.querySelector("main");
+  if (main) {
+    main.prepend(alert);
+  }
+
+  if (scroll) {
+    window.scrollTo(0, 0);
+  }
+}
+
+export function removeAllAlerts() {
+  document.querySelectorAll(".alert").forEach((el) => el.remove());
+}
+
+
+// Bounce/shake the cart (backpack) icon after an item is added
+export function animateCartIcon() {
+  const icon = document.querySelector("#cart-icon") || document.querySelector(".cart");
+  if (!icon) return;
+  icon.classList.remove("cart-animate");
+  // Force reflow so the animation can restart
+  void icon.offsetWidth;
+  icon.classList.add("cart-animate");
+  icon.addEventListener(
+    "animationend",
+    () => icon.classList.remove("cart-animate"),
+    { once: true }
+  );
+}
+
+// Wire the navbar product search form (loaded via header partial)
+export function setupProductSearch() {
+  const form = document.querySelector("#product-search-form");
+  if (!form) return;
+
+  // Prefill from current URL when on listing page
+  const current = getParam("search");
+  const input = form.querySelector("#product-search-input");
+  if (current && input) {
+    input.value = current;
+  }
+
+  form.addEventListener("submit", (event) => {
+    const value = (input?.value || "").trim();
+    if (!value) {
+      event.preventDefault();
+      return;
+    }
+    // Let the browser navigate to product_listing/?search=...
+  });
 }
