@@ -25,8 +25,16 @@ export default class ProductList {
   }
 
   async init() {
-    const list = await this.dataSource.getData(this.category);
-    this.renderList(list);
+    try {
+      const list = await this.dataSource.getData(this.category);
+      this.renderList(list);
+    } catch {
+      // The product API (a free Render service) can be asleep or unreachable
+      if (this.listElement) {
+        this.listElement.innerHTML =
+          '<li class="product-list__error">Products couldn\'t be loaded right now. Please refresh in a minute.</li>';
+      }
+    }
   }
 
   async search(query) {

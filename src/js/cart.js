@@ -92,7 +92,7 @@ function attachQuantityListeners() {
 
 function updateQuantity(productId, action) {
   const cartItems = getLocalStorage("so-cart");
-  const item = cartItems.find((item) => item.Id === productId);
+  const item = cartItems.find((cartItem) => cartItem.Id === productId);
 
   if (!item) return;
 
@@ -115,7 +115,7 @@ function updateQuantity(productId, action) {
 // Removes a line item entirely (the "x" button)
 function removeFromCart(productId) {
   const cartItems = getLocalStorage("so-cart");
-  const index = cartItems.findIndex((item) => item.Id === productId);
+  const index = cartItems.findIndex((cartItem) => cartItem.Id === productId);
 
   if (index === -1) return;
 
@@ -124,15 +124,5 @@ function removeFromCart(productId) {
   renderCartContents();
 }
 
-
-// Example: Calculate total cart value using reduce
-function calculateTotal(cartItems) {
-  return cartItems.reduce((total, item) => total + item.FinalPrice * item.Quantity, 0);
-}
-
-// Example: Filter products using a higher-order function
-function filterByCategory(products, category) {
-  return products.filter(product => product.Category === category);
-}
 
 renderCartContents();
